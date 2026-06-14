@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"os"
 )
 
@@ -453,7 +454,9 @@ func (w *WAL) compactionLoop() {
 		case <-w.ctx.Done():
 			return
 		case <-w.compactTrigger:
-			_ = w.runCompaction()
+			if err := w.runCompaction(); err != nil {
+				log.Printf("wal: compaction failed: %v", err)
+			}
 		}
 	}
 }
