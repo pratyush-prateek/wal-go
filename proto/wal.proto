@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package wal;
+
+option go_package = "github.com/pratyush-prateek/wal-go/walpb";
+
+// WalRecord is one serialized log entry on disk. data is opaque to the WAL.
+message WalRecord {
+  uint64 log_sequence_number = 1;
+  bytes data = 2;
+  uint32 checksum = 3;
+}
+
+// WalSnapshot is a stored snapshot from the underlying stateful application.
+// It covers all log entries up to and including upto_log_sequence_number.
+message WalSnapshot {
+  uint64 upto_log_sequence_number = 1;
+  bytes data = 2;
+  uint32 checksum = 3;
+}
